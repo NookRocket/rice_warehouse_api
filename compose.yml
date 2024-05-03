@@ -1,0 +1,60 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    environment:
+      MONGO_DB_HOST: localhost
+      MONGO_DB_PORT: 27017
+      MONGO_DB_URI: mongodb://localhost:27017
+      MONGO_DB_NAME: warehouse
+      # MONGO_URL: mongodb://localhost:27017/warehouse
+      # ROOT_URL: http://localhost
+    ports:
+      - "27017:27017"
+    volumes:
+      # - db-data:/data/db
+      - type: bind
+        source: "C:\\Program Files\\MongoDB\\Server\\6.0\\data"
+        target: /mongo-data/db
+      # - mongodb_data:/mongo-data/db
+    networks:
+      - mongodb-network
+      # - host
+
+  web:
+    build: warehouse
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/warehouse
+    ports:
+      - "8000:8000"
+    environment:
+      MONGO_DB_HOST: mongodb
+      MONGO_DB_PORT: 27017
+      MONGO_DB_NAME: warehouse
+      MONGO_DB_USERNAME:
+      MONGO_DB_PASSWORD:
+      MONGO_DB_URI: mongodb://mongodb:27017
+
+    depends_on:
+      - mongodb
+    networks:
+      - mongodb-network
+
+volumes:
+  db-data:
+    external: true
+  mongodb_data:
+    driver: external
+      
+      # source: "/mnt/c/Program Files/MongoDB/Server/6.0/data"
+    # driver: local
+
+# networks:
+#   database:
+#     external: true
+
+networks:
+  mongodb-network:
+    driver: bridge
+    name: mongo-network
