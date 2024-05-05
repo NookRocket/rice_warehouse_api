@@ -10,12 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-from pathlib import Path
-import mongoengine
-import logging
-
-# connect = mongoengine.connect(db="warehouse", host="mongodb", username="", password="")
-# logging.info("connect: %s", connect)
+from pathlib import Path, PurePath
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,6 +79,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': os.environ.get('MONGO_DB_NAME', 'warehouse'),
         'ENFORCE_SCHEMA': False,
+        # "HOST": "localhost",
         "CLIENT": {
             "host": os.environ.get('MONGO_DB_HOST', 'localhost'),
             "port": int(os.environ.get('MONGO_DB_PORT', 27017)),
@@ -129,6 +125,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [PurePath.joinpath(BASE_DIR, "static")]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
