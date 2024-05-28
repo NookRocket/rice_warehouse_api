@@ -37,12 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders', # To solve when using different django port, otheriwse the request won't happend
     'api',
+    'users',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -131,3 +134,14 @@ STATICFILES_DIRS = [PurePath.joinpath(BASE_DIR, "static")]
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# The model to use to represent a User.
+# https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#auth-custom-user
+AUTH_USER_MODEL = 'users.User'
+
+
+# A Django App that adds Cross-Origin Resource Sharing (CORS) headers to responses. 
+# This allows in-browser requests to your Django application from other origins.
+# https://pypi.org/project/django-cors-headers/
+CORS_ORIGIN_ALLOW_ALL = True # Still works as an alias, with the new name taking precedence.
+CORS_ALLOW_CREDENTIALS = True # Cookies will be allowed to be included in cross-site HTTP requests.
